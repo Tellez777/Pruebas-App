@@ -8,7 +8,7 @@ class UserService {
   final String baseUrl =
       "https://theoriginallab-apptol-api-login.m0oqwu.easypanel.host"; // url de la API en este caso la de registro
 
-//REGISTRO//
+//REGISTRO DE USUARIOS//
   Future<dynamic> registro({
     // funcion llamada "registro" y se ejecuta el registro de un usuario
     required String email,
