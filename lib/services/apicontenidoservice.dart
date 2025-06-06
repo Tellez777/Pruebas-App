@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl = "https://theoriginallab-apptol.m0oqwu.easypanel.host"; // url de la API, URL api de la app
+  final String baseUrl = "https://api-app.theoriginallab.com"; // url de la API, URL api de la app
 
   
 

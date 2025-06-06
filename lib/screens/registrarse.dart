@@ -13,7 +13,6 @@ class RegisterScreen extends StatefulWidget {
 
 Future<void> _saveUserLoggedIn() async {
   final prefs = await SharedPreferences.getInstance();
-  await prefs.setBool('isLoggedIn', true);
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
@@ -58,65 +57,59 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _onRegister() async {
-    if (!_formKey.currentState!.validate()) return;
-    try {
+  if (!_formKey.currentState!.validate()) return;
 
-      print('Datos a enviar:');
-      print('Email: ${emailController.text}');
-      print('Usuario: ${usernameController.text}');
-      print('Password ${passwordController.text}');
+  try {
+    print('Datos a enviar:');
+    print('Email: ${emailController.text}');
+    print('Usuario: ${usernameController.text}');
+    print('Password ${passwordController.text}');
 
-      final response = await userService.registro(
-        email: emailController.text,
-        username: usernameController.text,
-        password: passwordController.text,
-        phone: '0', 
-        profile_img: '',
+    final response = await userService.registro(
+      email: emailController.text,
+      username: usernameController.text,
+      password: passwordController.text,
+      phone: '0',
+      profile_img: '',
+    );
+
+    print('Respuesta completa de la API: $response');
+
+    if (response != null && response['token_verificacion'] != null) {
+      await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Éxito"),
+          content: const Text(
+              "Registro completado con éxito, por favor revisa el enlace enviado a tu correo para validarlo."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("OK"),
+            ),
+          ],
+        ),
       );
 
-      
-    print('Respuesta completa de la API: $response'); // Debug importante
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
 
-
-      if (response != null && response['token_verificacion'] != null) { //dejar el token verificacion
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('username', usernameController.text); // Guardar username
-      await prefs.setString('email', emailController.text);
-      print('Datos guardados: ${usernameController.text}, ${emailController.text}');   
-        
-      await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-    title: const Text("Éxito"), // Titulo de la alerta
-    content: const Text("Registro completado con éxito, por favor revisa el enlace enviado a tu correo para validarlo."),
-    actions: [
-      TextButton(
-        onPressed: () => Navigator.of(context).pop(),
-        child: const Text("OK"),
-      ),
-    ],
-  ),
-);
-
-Navigator.of(context).pushReplacement(
-  MaterialPageRoute(builder: (context) => LoginScreen()),
-);
-
-        emailController.clear();
-        usernameController.clear();
-        passwordController.clear();
+      emailController.clear();
+      usernameController.clear();
+      passwordController.clear();
+    } else {
+      if (response != null && response['message'] != null) {
+        _showDialog("Error", "Error en el registro: " + response['message']);
       } else {
-        if(response != null && response['message'] != null) {
-          _showDialog("Error", "Error en el registro: " + response['message']);
-        } else {
-          _showDialog("Error", "Error en el registro, por favor intenta nuevamente.");
-        }
+        _showDialog("Error", "Error en el registro, por favor intenta nuevamente.");
       }
-    } catch (e) {
-      print('Error completo: $e');
-      _showDialog("Error", "Ocurrió un error durante el registro: ${e.toString()}");
     }
+  } catch (e) {
+    print('Error completo: $e');
+    _showDialog("Error", "Ocurrió un error durante el registro: ${e.toString()}");
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +284,8 @@ Navigator.of(context).pushReplacement(
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("¿Ya tienes una cuenta? "),
+        Text("¿Ya tienes una cuenta?"),
+        const SizedBox(width: 5),
         GestureDetector(
           onTap: () {
             Navigator.pushReplacement(  // Navega a la pantalla de inicio de sesión despue de darle click al texto

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theoriginalapp/main.dart';
 
 class Perfil extends StatefulWidget {
@@ -11,24 +10,8 @@ class Perfil extends StatefulWidget {
 }
 
 class _PerfilState extends State<Perfil> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController(); // Puedes poner texto fijo si quieres
   final TextEditingController _emailController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserData(); // Cargar datos al iniciar
-  }
-
-  Future<void> _loadUserData() async {
-  try {
-    final prefs = await SharedPreferences.getInstance();
-    print('TODAS LAS CLAVES: ${prefs.getKeys()}'); // Debug importante
-    
-  } catch (e) {
-    print('Error al cargar: $e');
-  }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +23,7 @@ class _PerfilState extends State<Perfil> {
             backgroundColor: isDark ? Colors.black : Colors.white,
             elevation: 0,
             title: Text(
-              'Editar Perfil',
+              'Perfil',
               style: TextStyle(color: isDark ? Colors.white : Colors.black),
             ),
             leading: IconButton(
@@ -55,16 +38,16 @@ class _PerfilState extends State<Perfil> {
               gradient: isDark
                   ? null
                   : const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.white,
-                  Color(0xFFF5F5F5),
-                  Color(0xFFEEEEEE),
-                  Color(0xFFC2C1C1),
-                  Color(0xFFC2C1C1),
-                ],
-              ),
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.white,
+                        Color(0xFFF5F5F5),
+                        Color(0xFFEEEEEE),
+                        Color(0xFFC2C1C1),
+                        Color(0xFFC2C1C1),
+                      ],
+                    ),
               color: isDark ? Colors.black : null,
             ),
             child: SingleChildScrollView(
@@ -74,9 +57,9 @@ class _PerfilState extends State<Perfil> {
                 children: [
                   const CircleAvatar(
                     radius: 50,
-                    backgroundImage: AssetImage(''),
+                    backgroundImage: AssetImage('assets/iconousuario.png'),
                   ),
-                    SizedBox(height: 10.h),
+                  SizedBox(height: 10.h),
                   Container(
                     width: 180,
                     child: ElevatedButton(
@@ -88,18 +71,14 @@ class _PerfilState extends State<Perfil> {
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                         elevation: 0,
                       ),
-                      onPressed: () {},
+                      onPressed: () {}, // Función futura para cambiar foto
                       child: const Text('Cambiar foto', style: TextStyle(color: Colors.white)),
                     ),
                   ),
                   SizedBox(height: 30.h),
-                  _buildLabeledTextField('Nombre de usuario', _usernameController, TextInputType.text, isDark),
+                  _buildReadOnlyTextField('Nombre de usuario', _usernameController, isDark),
                   SizedBox(height: 15.h),
-                  _buildLabeledTextField('Email', _emailController, TextInputType.emailAddress, isDark),
-                  SizedBox(height: 15.h),
-                  Container(
-                    width: double.infinity,
-                  ),
+                  _buildReadOnlyTextField('Email', _emailController, isDark),
                 ],
               ),
             ),
@@ -109,7 +88,7 @@ class _PerfilState extends State<Perfil> {
     );
   }
 
-  Widget _buildLabeledTextField(String label, TextEditingController controller, TextInputType keyboardType, bool isDark) {
+  Widget _buildReadOnlyTextField(String label, TextEditingController controller, bool isDark) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -120,7 +99,7 @@ class _PerfilState extends State<Perfil> {
         SizedBox(height: 5.h),
         TextField(
           controller: controller,
-          keyboardType: keyboardType,
+          readOnly: true,
           style: TextStyle(color: isDark ? Colors.white : Colors.black),
           decoration: InputDecoration(
             filled: true,

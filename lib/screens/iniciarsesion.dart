@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theoriginalapp/main.dart';
+import 'package:theoriginalapp/screens/registrarse.dart';
 import 'package:theoriginalapp/services/userservices.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,6 +17,32 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
   bool _passwordVisible = false;
+
+  Widget _buildLoginLink() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      const Text("¿No tienes una cuenta?"),
+      const SizedBox(width: 5),
+      GestureDetector(
+        onTap: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => RegisterScreen()),
+          );
+        },
+        child: const Text(
+          "Regístrate",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.blue,
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
 
   @override
 void initState() {
@@ -55,9 +82,10 @@ Future<void> _loadSavedCredentials() async {
 
     try {
       final response = await http.post(
-        Uri.parse('https://theoriginallab-apptol-api-login.m0oqwu.easypanel.host/api/login'),
+        Uri.parse('https://api.originalauth.com/api/login'),
         headers: {
           'Content-Type': 'application/json',
+            'apikey': 'lety'
         },
         body: json.encode({
           "email": email,
@@ -79,7 +107,7 @@ Future<void> _loadSavedCredentials() async {
           MaterialPageRoute(builder: (context) => HomeScreen()),
         );
       } else {
-        _showDialog('Error de autenticación', data['message'] ?? 'Credenciales incorrectas.');
+        _showDialog('Error de autenticación', data['error'] ?? 'Credenciales incorrectas.');
       }
     } catch (e) {
       print('Error: $e');
@@ -160,8 +188,15 @@ Future<void> _loadSavedCredentials() async {
             ),
             SizedBox(height: 80.h),
             _isLoading
-                ? const CircularProgressIndicator()
-                : _buildLoginButton(screenSize.width * 0.6.w),
+            ? const CircularProgressIndicator()
+            : Column(
+            children: [
+            _buildLoginButton(screenSize.width * 0.6.w),
+            SizedBox(height: 20.h),
+            _buildLoginLink(),
+        ],
+      ),
+
           ],
         ),
       ),
@@ -218,7 +253,6 @@ Future<void> _loadSavedCredentials() async {
       ),
     );
   }
-
   Widget _buildLoginButton(double width) {
     return SizedBox(
       width: width,

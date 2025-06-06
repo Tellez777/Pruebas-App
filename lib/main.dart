@@ -58,7 +58,7 @@ void main() async {
       designSize: Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (_, child) => MyApp(),
+      builder: (_, __) =>  const MyApp(),
     ),
   ); // se ejecuta la app
 }
@@ -74,7 +74,8 @@ class AppData {
 }
 
 /// Widget principal que maneja el tema de la app y el splash screen
-class MyApp extends StatefulWidget {  //se definen dos value notifier, el theme notifier que controla si es modo oscuro o claro y el selected que guarda el tema seleccionado
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});  //se definen dos value notifier, el theme notifier que controla si es modo oscuro o claro y el selected que guarda el tema seleccionado
   static final ValueNotifier<bool> themeNotifier = ValueNotifier(false);
   static final ValueNotifier<String> selectedMenuOption = ValueNotifier('');
 

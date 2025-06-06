@@ -5,8 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 
 class UserService {
-  final String baseUrl =
-      "https://theoriginallab-apptol-api-login.m0oqwu.easypanel.host"; // url de la API en este caso la de registro
+  final String baseUrl = "https://api.originalauth.com"; // url de la API 
 
 //REGISTRO DE USUARIOS//
   Future<dynamic> registro({
@@ -28,8 +27,7 @@ class UserService {
         'profile_img': '',
       };
 
-      response = await _request('POST', '/api/register',
-          body); //endpoint de registro, se llama al metodo _request con el metodo POST y el endpoint api/registrar
+      response = await _request('POST', '/api/register', body); //endpoint de registro, se llama al metodo _request con el metodo POST y el endpoint api/registrar
       
     } catch (e) {
       print('Error en registro: $e');
@@ -45,7 +43,8 @@ Future<bool> login({
 }) async {
   try {
     final encodedPassword = base64.encode(utf8.encode(password));
-
+    print('encodedPassword: $encodedPassword'); // imprime la contraseña codificada
+    print('email: $email'); // imprime el email
     final response = await http.post(
       Uri.parse('$baseUrl/api/login'),
       headers: {'Content-Type': 'application/json'},
