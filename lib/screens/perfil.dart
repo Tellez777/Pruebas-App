@@ -25,12 +25,6 @@ class _PerfilState extends State<Perfil> {
     final prefs = await SharedPreferences.getInstance();
     print('TODAS LAS CLAVES: ${prefs.getKeys()}'); // Debug importante
     
-    setState(() {
-      _usernameController.text = prefs.getString('username') ?? 'No encontrado';
-      _emailController.text = prefs.getString('email') ?? 'No encontrado';
-    });
-    
-    print('Datos CARGADOS - Username: ${_usernameController.text}, Email: ${_emailController.text}');
   } catch (e) {
     print('Error al cargar: $e');
   }
