@@ -81,7 +81,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         builder: (context) => AlertDialog(
           title: const Text("Éxito"),
           content: const Text(
-              "Registro completado con éxito, por favor revisa el enlace enviado a tu correo para validarlo."),
+          "Registro completado con éxito, por favor revisa el enlace enviado a tu correo para validarlo."),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -127,7 +127,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.r), // Agregado para simetría visual
+                    topLeft: Radius.circular(30.r), // Esquinas redondeadas
                     topRight: Radius.circular(30.r),
                   ),
                 ),
@@ -169,23 +169,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
         children: [
           _buildTitle(),
           SizedBox(height: 30.h),
+
           _buildInputField(
             label: 'Email',
             controller: emailController,
             validator: _validateEmail,
             keyboardType: TextInputType.emailAddress,
           ),
+
           _buildInputField(
             label: 'Usuario',
             controller: usernameController,
             validator: (value) => _validateRequired(value, "un nombre de usuario"),
           ),
+
           _buildInputField(
             label: 'Contraseña',
             controller: passwordController,
             isPassword: true,
             validator: (value) => _validateRequired(value, "una contraseña"),
           ),
+          
           SizedBox(height: 30.h),
           _buildRegisterButton(screenSize),
           SizedBox(height: 20.h),
@@ -233,7 +237,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               contentPadding: EdgeInsets.symmetric(horizontal: 16),
               suffixIcon: isPassword
                   ? IconButton(
-                      icon: Icon(
+                      icon: Icon(  // Icono de visibilidad de contraseña
                         _isPasswordVisible
                             ? Icons.visibility
                             : Icons.visibility_off,
